@@ -22,14 +22,15 @@ cap('Cmu','5','3',1e-9)
 cap('Cpi','3','6',2e-9)
  
 
-add_extraIndices
+%add_extraIndices
+G= makeGmatrix;
 n = elementList.n;% MNA size 
 
 
 
 
 %%  1.   Call your  DC solve function  here and report your observations in your report
-Xguess = zeros(n,1);
+Xguess = ones(n,1);
 [Xdc, dX] = dcsolve(Xguess,1e-3);   
 
 %%  2.   Call your  Continutation  DC solve function.
@@ -43,7 +44,7 @@ outNode ='7';
 
  % call your nonlinear frequnecy reposnse function here
         % Note: name the output of the nonlinear_fsolve as r    
-nonlinear_fsolve(fpoints,outNode);
+r = nonlinear_fsolve(fpoints,outNode);
           
           
 

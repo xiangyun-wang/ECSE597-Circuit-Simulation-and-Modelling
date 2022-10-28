@@ -78,20 +78,27 @@ for I=1:elementList.BJTs.numElements
      else
         Ve = X(eNode);
      end
-
-     J(cNode,bNode) = 1/Vt * exp((Vb-Ve)/Vt);
-     J(cNode,eNode) = (-1)/Vt * exp((Vb-Ve)/Vt);
-     J(bNode,bNode) = (1-alphaR)/alphaR * (1/Vt) * exp((Vb-Ve)/Vt);
-     J(bNode,eNode) = (-1)*(1-alphaR)/alphaR * (1/Vt) * exp((Vb-Ve)/Vt);
-     J(eNode,bNode) = (-1)/alphaR * (1/Vt) * exp((Vb-Ve)/Vt);
-     J(eNode,eNode) = (1)/alphaR * (1/Vt) * exp((Vb-Ve)/Vt);
-    
+     J(cNode,cNode) = Is/Vt*exp((Vb-Ve)/Vt);
+     J(cNode,bNode) = (-1)*Is/Vt*exp((Vb-Vc)/Vt) + alphaF * Is/Vt*exp((Vb-Ve)/Vt);
+     J(cNode,eNode) = (-1) * alphaF * Is/Vt*exp((Vb-Ve)/Vt);
+     J(bNode,cNode) = (-1) * (1-alphaR) * Is/Vt*exp((Vb-Vc)/Vt);
+     J(bNode,bNode) = (1-alphaF) * Is/Vt*(exp((Vb-Ve)/Vt)) + (1-alphaR) * Is/Vt*exp((Vb-Vc)/Vt);
+     J(bNode,eNode) = (-1) * (1-alphaF) * Is/Vt*(exp((Vb-Ve)/Vt));
+     J(eNode,cNode) = (-1) * alphaR * Is / Vt * exp((Vb-Vc)/Vt);
+     J(eNode,bNode) = (-1) * Is / Vt * exp((Vb-Ve)/Vt) + alphaR * Is / Vt * exp((Vb-Vc)/Vt);
+     J(eNode,eNode) = Is / Vt * exp((Vb-Ve)/Vt);
+        
+     % need to change
      if cNode == 0
+        J(cNode,cNode) = 0;
         J(cNode,bNode) = 0;
         J(cNode,eNode) = 0;
+        J(bNode,cNode) = 0;
+        J(eNode,cNode) = 0;
      end
 
      if bNode == 0
+        J(bNode,cNode) = 0;
         J(bNode,bNode) = 0;
         J(bNode,eNode) = 0;
         J(cNode,bNode) = 0;
@@ -99,6 +106,7 @@ for I=1:elementList.BJTs.numElements
      end
 
      if eNode == 0
+        J(eNode,cNode) = 0;
         J(eNode,bNode) = 0;
         J(eNode,eNode) = 0;
         J(cNode,eNode) = 0;

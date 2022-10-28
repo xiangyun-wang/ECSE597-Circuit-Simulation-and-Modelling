@@ -20,9 +20,13 @@ while (1)
     J = make_nlJacobian(Xdc);
     phi = G * Xdc + F - alpha * Bdc;
     dphi = G + J;
+    %[L,U,P] = lu((-1)*dphi);
+    %y = L\(P*dphi);
+    %delta_x = U\y;% 
     delta_x = ((-1) * dphi)\phi;
     Xdc = Xdc + delta_x;
-    if norm(delta_x) < maxerr
+    %norm(delta_x)
+    if norm(full(delta_x)) < maxerr
         break;
     end
 end

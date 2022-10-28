@@ -17,8 +17,8 @@ guess = zeros(n,1);
 
 G = makeGmatrix;
 C = makeCmatrix;
-[Bdc, Bac] = makeBmatrix;
-Xdc = dcsolve(guess,0.0001);
+[Bdc, Bac] = makeBvector;
+[Xdc, dX] = dcsolve(guess,0.0001);
 Jdc = make_nlJacobian(Xdc);
 [~,f_size] = size(fpoints);
 f_responses = zeros(1,f_size);

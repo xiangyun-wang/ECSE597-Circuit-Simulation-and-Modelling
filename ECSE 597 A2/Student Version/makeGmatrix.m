@@ -66,6 +66,36 @@ for I=1:elementList.DC_VolSources.numElements
     
 end 
 
+for I=1:elementList.AC_VolSources.numElements
+    % access nodes Numbers of the Resistor
+    %nodes of a I^{th} element are located in Row I of the nodeNumbers
+    %field
+    
+    nodes = elementList.AC_VolSources.nodeNumbers(I,:);
+    
+    % For voltage sources we need to add an extra row and a column 
+    nX= elementList.n+1;  % extra node 
+    elementList.n = elementList.n+1;  % update the numNode
+    
+    % store the extra node as you will need this in in filling Bvector
+      % to do this we use the field currIndex in DC_volSources
+     elementList.AC_VolSources.curIdx(I) = nX;
+    
+     Gmat(nX,nX)=0;   %  update the size of Gmat
+     
+    if(nodes(1)~=0)
+        Gmat(nX,nodes(1)) = Gmat(nX,nodes(1))  + 1;
+        Gmat(nodes(1),nX) = Gmat(nodes(1),nX) +1;
+
+    end
+    if(nodes(2)~=0)
+        Gmat(nX,nodes(2)) = Gmat(nX,nodes(2))  - 1;
+        Gmat(nodes(2),nX) = Gmat(nodes(2),nX) - 1;
+    end 
+
+    
+end 
+
 
 % add stamps for other elements here...
 

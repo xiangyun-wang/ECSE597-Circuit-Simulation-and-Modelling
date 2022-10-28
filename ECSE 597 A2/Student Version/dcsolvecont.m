@@ -11,7 +11,7 @@ function Xdc = dcsolvecont(n_steps,maxerr)
 global elementList
 
 % size of MNA matrix
-alpha = linespace(0,1,n_steps);
+alpha = linspace(0,1,n_steps);
 n = elementList.n;
 Xdc = zeros(n,1);
 for step = 1:n_steps

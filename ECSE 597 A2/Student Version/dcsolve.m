@@ -15,18 +15,29 @@ global elementList
 G = makeGmatrix;
 iteration = 1;
 delta_x = zeros(size(Xguess));
+[row,~] = size(Xguess);
 Xdc = Xguess;
 while (1)
     F = makeFvect(Xdc);
     J = make_nlJacobian(Xdc);
     phi = G * Xdc + F - Bdc;
     dphi = G + J;
+%     det(dphi)
     delta_x = ((-1) * dphi)\phi;
+%     for c = 1:row
+%         if isnan(delta_x(c,1))
+%             delta_x(c,1) = 0;
+%         end
+%     end
     dX(iteration) = norm(delta_x);
     Xdc = Xdc + delta_x;
     if norm(delta_x) < maxerr
         break;
     end
+%     if iteration == 5
+%         break;
+%     end
+    %Bdc
     iteration = iteration + 1;
 end
 
