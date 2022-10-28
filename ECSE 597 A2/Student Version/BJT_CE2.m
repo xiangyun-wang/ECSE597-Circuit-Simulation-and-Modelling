@@ -25,16 +25,39 @@ cap('Cpi','3','6',2e-9)
 %add_extraIndices
 G= makeGmatrix;
 n = elementList.n;% MNA size 
-
-
-
+% Xdc = zeros(n,1)
+% Xdc(3,1) = 1.83;
+% Xdc(4,1) = 12;
+% Xdc(5,1) = 12;
+% Xdc(6,1) = 0.0000000025;
+% Xdc(8,1) = -0.00051;
+% F = makeFvect(Xdc)
+% J = make_nlJacobian(Xdc)
+% phi = G * Xdc + F - Bdc
+% dphi = G + J
+% delta_x = ((-1) * dphi)\phi
+% Xdc = Xdc + delta_x
+% norm(delta_x)
+% 
+% %G= makeGmatrix
+% %[Bdc,Bac] = makeBvector
+% %C = makeCmatrix
+% %n = elementList.n;% MNA size
+% F = makeFvect(Xdc)
+% J = make_nlJacobian(Xdc)
+% phi = G * Xdc + F - Bdc
+% dphi = G + J
+% det(dphi)
+% delta_x = ((-1) * dphi)\phi
+% Xdc = Xdc + delta_x
+% norm(delta_x)
 
 %%  1.   Call your  DC solve function  here and report your observations in your report
-Xguess = ones(n,1);
-[Xdc, dX] = dcsolve(Xguess,1e-3);   
+%Xguess = zeros(n,1);
+%[Xdc, dX] = dcsolve(Xguess,1e-3);   
 
 %%  2.   Call your  Continutation  DC solve function.
-Xdc = dcsolvecont(100,1e-6);
+Xdc = dcsolvecont(100,1e-6)
 
 
 %%  3.   Test yout nonlinear frequency reponse function
