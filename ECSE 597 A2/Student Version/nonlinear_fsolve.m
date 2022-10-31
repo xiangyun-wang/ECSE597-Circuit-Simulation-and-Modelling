@@ -19,19 +19,20 @@ G = makeGmatrix;
 C = makeCmatrix;
 [Bdc, Bac] = makeBvector;
 Xdc= dcsolvecont(100,1e-6);
-Jdc = make_nlJacobian(Xdc);
+Jdc = make_nlJacobian(dcsolvecont(100,1e-6));
 [~,f_size] = size(fpoints);
 f_responses = zeros(1,f_size);
 B_fr = zeros(n,1);
 
-for m = 1:n
-    if (Bac(m,1) ~= 0) 
-        B_fr(m,1) = 1;
-    end
-end
+% for m = 1:n
+%     if (Bac(m,1) ~= 0) 
+%         B_fr(m,1) = 1;
+%     end
+% end
 
 for i = 1:f_size
-    tmp = (G+2*pi*1i*fpoints(1,i)*C+Jdc)\B_fr;
+    A = (G+2*pi*1i*fpoints(1,i)*C+Jdc);
+    tmp = A\Bac;
     f_responses(1,i) = tmp(outNodeNumber,1);
 end
 
