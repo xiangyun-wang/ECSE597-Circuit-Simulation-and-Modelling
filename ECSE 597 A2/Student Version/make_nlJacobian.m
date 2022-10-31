@@ -78,7 +78,7 @@ for I=1:elementList.BJTs.numElements
      else
         Ve = X(eNode);
      end
-     J(cNode,cNode) = Is/Vt*exp((Vb-Ve)/Vt);
+     J(cNode,cNode) = Is/Vt*exp((Vb-Vc)/Vt);
      J(cNode,bNode) = (-1)*Is/Vt*exp((Vb-Vc)/Vt) + alphaF * Is/Vt*exp((Vb-Ve)/Vt);
      J(cNode,eNode) = (-1) * alphaF * Is/Vt*exp((Vb-Ve)/Vt);
      J(bNode,cNode) = (-1) * (1-alphaR) * Is/Vt*exp((Vb-Vc)/Vt);

@@ -1,11 +1,11 @@
 InitiateCircuit
 
-vol('v1','1','0','type','ac','amplitude',0.010)
+vol('v1','1','0','type','ac','amplitude',0.01)
 res('Rs','1','2',50)% source resistor
 cap('Cb','2','3',1e-6)% coupling capacitor 
 res('r2','3','4',20e3)
 vol('vcc','4','0','type','dc','val_dc',12)
-res('r3','3','0',3.6e3 )
+res('r3','3','0',3.6e3)
 bjt('q1','5','3','6', 'type','NPN','Is',1e-13,'Vt',0.025,'alphaF',0.99,'alphaR',0.1)
 res('r4','6','0',220)%emitter res
 cap('Ce','6','0',100e-6)
