@@ -12,7 +12,7 @@ bjt('BJT1','2','3','4', 'type', 'NPN', 'IS', 1e-15,'Vt', 0.025,'alphaF',0.99,'al
 %----------------------------------------------------------------------
 %----------------------------------------------------------------------
 % Base to Ground %4V Active % 6V Saturation %0 Cut-off
-Vb = 6; 
+Vb = 4; 
 
 vol('V2','3','0','type','DC', 'VAL_DC',Vb)
 
@@ -27,7 +27,7 @@ G= makeGmatrix;
 Xguess = zeros(size(G,1),1);
 maxerr = 1e-4;
 
-[Xdcsolve, dX] = dcsolve(Xguess,maxerr)
+%[Xdcsolve, dX] = dcsolve(Xguess,maxerr)
  
  
  Xdcsolve_cont = dcsolvecont(50,maxerr)
