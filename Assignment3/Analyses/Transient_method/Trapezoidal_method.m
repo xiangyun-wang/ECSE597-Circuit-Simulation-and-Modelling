@@ -19,3 +19,19 @@ tpoints = 0:h:tEnd;
 
 Gmat = makeGmatrix;
 Cmat = makeCmatrix;
+
+
+[row,~] = size(Gmat);
+X_n = zeros(row);
+y(1) = 0;
+for I=2:(length(tpoints))
+    % make Bvector at time tpoints(I)
+    Btr = makeBt(tpoints(I-1));
+    Btr_1 = makeBt(tpoints(I));
+    % you can write your code here
+    X_n = (dot(((2/h)*Cmat-Gmat),X_n)+Btr + Btr_1)\(Gmat+(2/h)*Cmat);
+    y(I) = X_n(out_NodeNumber);
+end 
+     
+    
+end    

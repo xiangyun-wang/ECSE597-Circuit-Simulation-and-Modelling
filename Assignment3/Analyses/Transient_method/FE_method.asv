@@ -22,13 +22,13 @@ Cmat = makeCmatrix;
 
 [row,~] = size(Gmat);
 X_n = zeros(row);
-y(1) = 0;
-for I=2:(length(tpoints))
+
+for I=1:length(tpoints)
     % make Bvector at time tpoints(I)
-    Btr = makeBt(tpoints(I-1));
-    X_n = (Btr-dot((Gmat-Cmat/h),X_n))\(Cmat/h);
+    Btr = makeBt(tpoints(I));
+    X_n = Btr-(G-C/h)
     % you can write your code here
-    y(I) = X_n(out_NodeNumber);
+
 end 
      
     
