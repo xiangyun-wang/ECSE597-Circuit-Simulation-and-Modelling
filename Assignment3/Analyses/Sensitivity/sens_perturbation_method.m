@@ -19,7 +19,6 @@ function [D,S] = sens_perturbation_method(fpoints,eleNames,outNode)
 % delta_something/something = 0.01
 
 % find elements
-global elementList
 flag = 0
 ori_Gmat = makeGmatrix;
 ori_Cmat = makeCmatrix;
@@ -42,8 +41,8 @@ for m = 1:length(eleNames)
             % get the conductance for the resisitor
             % resistance is stored in the field named value
             g = 1/( elementList.Resistors.value(I));
-            g_delta = 1.0001/( elementList.Resistors.value(I));
-            delta_lamda = 0.0001/( elementList.Resistors.value(I));
+            g_delta = 1.01/( elementList.Resistors.value(I));
+            delta_lamda = 0.01/( elementList.Resistors.value(I));
             lamda = g;
             if(nodes(1)~=0) && (nodes(2)~=0)
                 Gmat(nodes(1),nodes(1)) = Gmat(nodes(1),nodes(1))  - g + g_delta;
@@ -75,8 +74,8 @@ for m = 1:length(eleNames)
                 % get the conductance for the resisitor
                 % resistance is stored in the field named value
                 c= elementList.Capacitors.value(I);
-                c_delta= elementList.Capacitors.value(I)*1.0001;
-                delta_lamda = elementList.Capacitors.value(I)*0.0001;
+                c_delta= elementList.Capacitors.value(I)*1.01;
+                delta_lamda = elementList.Capacitors.value(I)*0.01;
                 lamda = c;
                 if(nodes(1)~=0) && (nodes(2)~=0)
                     Cmat(nodes(1),nodes(1)) = Cmat(nodes(1),nodes(1))  - c + c_delta;
@@ -99,9 +98,7 @@ for m = 1:length(eleNames)
 
     delta_r = fsolve( fpoints ,outNode, Gmat, Cmat) - ori_r;
     D(:,m) = delta_r/delta_lamda;
-    for I = 1:length(fpoints)
-        S(I,m) = D(I,m)*(lamda/ori_r(I));
-    end
+    S(:,m) = delta_r/(delta_lamda/lamda);
 end
 
 end

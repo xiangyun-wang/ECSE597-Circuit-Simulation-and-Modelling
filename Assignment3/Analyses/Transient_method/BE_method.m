@@ -13,11 +13,12 @@ function [tpoints, y]= BE_method(tEnd,h, outNode)
 %--------------------------------------------------------------------------
 
 global elementList
-out_NodeNumber = getNodeNumber(outNode) ;
+
 
 tpoints = 0:h:tEnd; 
 Gmat = makeGmatrix;
 Cmat = makeCmatrix;
+out_NodeNumber = getNodeNumber(outNode) ;
 [row,~] = size(Gmat);
 X_n = zeros(row);
 % x_n+1 = x_n + hx_n+1_dot
@@ -28,7 +29,7 @@ for I=1:length(tpoints)
     Btr = makeBt(tpoints(I));
     
     % you can write your code here
-    X_n = (Btr - dot((Cmat/h),X_n))\(G+C/h);
+    X_n = inv((Gmat+Cmat/h))*(Btr + (Cmat/h)*X_n);
     y(I) = X_n(out_NodeNumber);
 end 
      

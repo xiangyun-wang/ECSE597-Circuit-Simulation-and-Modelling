@@ -26,7 +26,7 @@ y(1) = 0;
 for I=2:(length(tpoints))
     % make Bvector at time tpoints(I)
     Btr = makeBt(tpoints(I-1));
-    X_n = (Btr-dot((Gmat-Cmat/h),X_n))\(Cmat/h);
+    X_n = inv((Cmat/h))*(Btr-(Gmat-Cmat/h)*X_n);
     % you can write your code here
     y(I) = X_n(out_NodeNumber);
 end 

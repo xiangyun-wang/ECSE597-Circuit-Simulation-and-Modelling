@@ -1,5 +1,5 @@
-function [D,S] = sens_perturbation_method(fpoints,eleNames,outNode)
-% This function uses DIFFERENCE method to compute the sensitivity of the
+function [D,S] = sens_differentiation_method(fpoints,eleNames,outNode)
+% This function uses the DIFFERENTIATION method to compute the sensitivity of the
 % output node with respect to all the parameters.
 %Inputs: 1. fpoints: contains the frequency points at which the sensitivity is
 % is required.
@@ -11,24 +11,18 @@ function [D,S] = sens_perturbation_method(fpoints,eleNames,outNode)
 % a given element in one column of D for all fpoints.
 % In this case if there are F number of frequency points and
 % P number of elements in eleNames, then the size of matrix D
-% will be FxP.
+% will be F x P.
 % 2. S: is matrix. It should contain the RELATIVE sensitivity of
 % outNode for all the elements in eleNames. It can be filled
 % similar to matrix D.
 
-% delta_something/something = 0.01
 
-% find elements
-global elementList
 flag = 0
 ori_Gmat = makeGmatrix;
 ori_Cmat = makeCmatrix;
-out_NodeNumber = getNodeNumber(outNode)
-ori_r = fsolve( fpoints ,outNode, ori_Gmat, ori_Cmat);
-for m = 1:length(eleNames)
-    element = eleNames(m);
-    Gmat = ori_Gmat;
-    Cmat = ori_Cmat;
+for element = eleNames
+    delta_Gmat = zeros(size(ori_Gmat));
+    delta_Cmat = zeros(size(ori_Cmat));
     flag = 0;
     for I=1:elementList.Resistors.numElements
     
@@ -42,14 +36,12 @@ for m = 1:length(eleNames)
             % get the conductance for the resisitor
             % resistance is stored in the field named value
             g = 1/( elementList.Resistors.value(I));
-            g_delta = 1.0001/( elementList.Resistors.value(I));
-            delta_lamda = 0.0001/( elementList.Resistors.value(I));
-            lamda = g;
+            g_delta = 1/( elementList.Resistors.value(I)*1.01);
             if(nodes(1)~=0) && (nodes(2)~=0)
-                Gmat(nodes(1),nodes(1)) = Gmat(nodes(1),nodes(1))  - g + g_delta;
-                Gmat(nodes(1),nodes(2)) = Gmat(nodes(1),nodes(2)) + g - g_delta;
-                Gmat(nodes(2),nodes(1)) = Gmat(nodes(2),nodes(1)) + g - g_delta;
-                Gmat(nodes(2),nodes(2)) = Gmat(nodes(2),nodes(2)) - g + g_delta;
+                delta_Gmat(nodes(1),nodes(1)) = 1;
+                delta_Gmat(nodes(1),nodes(2)) = Gmat(nodes(1),nodes(2)) + g - g_delta;
+                delta_Gmat(nodes(2),nodes(1)) = Gmat(nodes(2),nodes(1)) + g - g_delta;
+                Gmdelta_Gmatat(nodes(2),nodes(2)) = 1;
             elseif (nodes(1)==0) && (nodes(2)~=0)
             
                 Gmat(nodes(2),nodes(2)) = Gmat(nodes(2),nodes(2)) - g + g_delta;
@@ -75,9 +67,7 @@ for m = 1:length(eleNames)
                 % get the conductance for the resisitor
                 % resistance is stored in the field named value
                 c= elementList.Capacitors.value(I);
-                c_delta= elementList.Capacitors.value(I)*1.0001;
-                delta_lamda = elementList.Capacitors.value(I)*0.0001;
-                lamda = c;
+                c_delta= elementList.Capacitors.value(I)*1.01;
                 if(nodes(1)~=0) && (nodes(2)~=0)
                     Cmat(nodes(1),nodes(1)) = Cmat(nodes(1),nodes(1))  - c + c_delta;
                     Cmat(nodes(1),nodes(2)) = Cmat(nodes(1),nodes(2)) + c - c_delta;
@@ -97,12 +87,9 @@ for m = 1:length(eleNames)
 
     % now we have the changed G and C
 
-    delta_r = fsolve( fpoints ,outNode, Gmat, Cmat) - ori_r;
-    D(:,m) = delta_r/delta_lamda;
-    for I = 1:length(fpoints)
-        S(I,m) = D(I,m)*(lamda/ori_r(I));
-    end
 end
+
+
 
 end
 

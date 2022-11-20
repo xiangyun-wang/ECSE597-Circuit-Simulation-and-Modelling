@@ -29,7 +29,7 @@ for I=2:(length(tpoints))
     Btr = makeBt(tpoints(I-1));
     Btr_1 = makeBt(tpoints(I));
     % you can write your code here
-    X_n = (dot(((2/h)*Cmat-Gmat),X_n)+Btr + Btr_1)\(Gmat+(2/h)*Cmat);
+    X_n = inv((Gmat+(2/h)*Cmat))*(((2/h)*Cmat-Gmat)*X_n+Btr + Btr_1);
     y(I) = X_n(out_NodeNumber);
 end 
      

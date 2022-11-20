@@ -29,16 +29,13 @@ global elementList
 
 %%
 
-flag = 0;
+flag = 0
 ori_Gmat = makeGmatrix;
 ori_Cmat = makeCmatrix;
 f_r_v = f_solve_vector(fpoints, ori_Gmat, ori_Cmat);
-out_NodeNumber = getNodeNumber(out) ; 
-lamda = 0;
-for m = 1:length(eleNames)
+for element = eleNames
     delta_Gmat = zeros(size(ori_Gmat));
     delta_Cmat = zeros(size(ori_Cmat));
-    element = eleNames(m);
     flag = 0;
     for I=1:elementList.Resistors.numElements
     
@@ -46,7 +43,6 @@ for m = 1:length(eleNames)
         %nodes of a I^{th} element are located in Row I of the nodeNumbers
         %field
         name = elementList.Resistors.Name(I);
-        lamda = elementList.Resistors.value(I);
         if strcmp(name,element) 
             nodes = elementList.Resistors.nodeNumbers(I,:);
         
@@ -76,7 +72,6 @@ for m = 1:length(eleNames)
             %nodes of a I^{th} element are located in Row I of the nodeNumbers
             %field
             name = elementList.Capacitors.Name(I);
-            lamda = elementList.Capacitors.value(I);
             if strcmp(name,element) 
                 nodes = elementList.Capacitors.nodeNumbers(I,:);
             
@@ -104,12 +99,8 @@ for m = 1:length(eleNames)
     % now we have the changed delta_G and delta_C -> dA/dlamda = delta_G +
     % jw*delta_C
     % loop over all frequency, select outnode
-    for I = 1:length(fpoints)
-        A = (ori_Gmat+2*pi*fpoints(I)*1i*ori_Cmat);
-        delta_abs = A\((-1)*(delta_Gmat+2*pi*fpoints(I)*1i*delta_Cmat)*transpose(f_r_v(I,:)));
-        D(I,m) = delta_abs(out_NodeNumber);
-        S(I,m) = D(I,m)*(lamda/f_r_v(I,out_NodeNumber));
-    end
+    inv()*(-1)*(delta_Gmat+2*pi*fpoints(I)*1i*delta_Cmat)*f_r_v(I)
+
 end
 
 
