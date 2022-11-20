@@ -23,7 +23,7 @@ global elementList
 flag = 0
 ori_Gmat = makeGmatrix;
 ori_Cmat = makeCmatrix;
-out_NodeNumber = getNodeNumber(outNode)
+out_NodeNumber = getNodeNumber(outNode);
 ori_r = fsolve( fpoints ,outNode, ori_Gmat, ori_Cmat);
 for m = 1:length(eleNames)
     element = eleNames(m);
@@ -42,7 +42,7 @@ for m = 1:length(eleNames)
             % get the conductance for the resisitor
             % resistance is stored in the field named value
             g = 1/( elementList.Resistors.value(I));
-            g_delta = 1.0001/( elementList.Resistors.value(I));
+            g_delta = (1.0001/( elementList.Resistors.value(I)));
             delta_lamda = 0.0001/( elementList.Resistors.value(I));
             lamda = g;
             if(nodes(1)~=0) && (nodes(2)~=0)

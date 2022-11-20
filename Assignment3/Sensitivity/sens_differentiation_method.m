@@ -46,7 +46,7 @@ for m = 1:length(eleNames)
         %nodes of a I^{th} element are located in Row I of the nodeNumbers
         %field
         name = elementList.Resistors.Name(I);
-        lamda = elementList.Resistors.value(I);
+        lamda = 1/elementList.Resistors.value(I);
         if strcmp(name,element) 
             nodes = elementList.Resistors.nodeNumbers(I,:);
         
@@ -104,6 +104,7 @@ for m = 1:length(eleNames)
     % now we have the changed delta_G and delta_C -> dA/dlamda = delta_G +
     % jw*delta_C
     % loop over all frequency, select outnode
+
     for I = 1:length(fpoints)
         A = (ori_Gmat+2*pi*fpoints(I)*1i*ori_Cmat);
         delta_abs = A\((-1)*(delta_Gmat+2*pi*fpoints(I)*1i*delta_Cmat)*transpose(f_r_v(I,:)));
