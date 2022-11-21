@@ -2,7 +2,8 @@
 clear all
 Circuit_chebychev_filter_TD;   % load netlist for filter with time domain source
 add_extraIndices
-
+Gmat = makeGmatrix;
+Cmat = makeCmatrix;
 % Find transient response using backward Euler
 tEnd =20e-3;
 h = 1e-6;
@@ -15,12 +16,13 @@ out = '10';
 
 Circuit_chebychev_filter_freq % Load chebychev filter with AC input
 add_extraIndices
-
+Gmat = makeGmatrix;
+Cmat = makeCmatrix;
 % Set frequency point at 2000Hz
 fpoint = 2000;
 
 % call the fsovle function to compute the frequency response at fpoint
-Fresp = fsolve(fpoint , out);   % modify it according to your fsolve. 
+Fresp = fsolve(fpoint , out,Gmat,Cmat);   % modify it according to your fsolve. 
 
 
 %% Sample the steady state output in the time domain

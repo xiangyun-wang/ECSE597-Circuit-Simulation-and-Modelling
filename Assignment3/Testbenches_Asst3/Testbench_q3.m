@@ -33,7 +33,7 @@ grid on
 xlabel('Time (mSec)','FontSize',12)
 ylabel('Output Voltage (mV)','FontSize',12)
 legend({'Backward Euler h=1pSec','Backward Eurler h=30pSec', ...
-    'Trapezoidal Rule h=60pSec'},'FontSize',12);
+    'Backward Eurler h=60pSec'},'FontSize',12);
 
 
 
@@ -42,7 +42,7 @@ figure(2)
 hold off
 clf
 plot(1000*tpointsh1, 1000*tranrespFEh1,'b','LineWidth',2);
-
+hold on
 
 plot(1000*tpointsh2, 1000*tranrespFEh2,'r:','LineWidth',2);
 grid on
@@ -59,3 +59,9 @@ grid on
 xlabel('Time (mSec)','FontSize',12)
 ylabel('Output Voltage (mV)','FontSize',12)
 legend({'Forward Euler h=60pSec'},'FontSize',12)
+
+
+Gmat = makeGmatrix;
+Cmat = makeCmatrix;
+
+poles = eig((-1) * Cmat\Gmat)
