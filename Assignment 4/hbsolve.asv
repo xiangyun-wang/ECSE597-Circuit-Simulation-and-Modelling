@@ -1,0 +1,38 @@
+function [Xout] = hbsolve(Xguess,H)
+
+%This function solves the Harmonic Balance Equations using Newton-Raphson
+%method.
+
+% Input: Xguess:  is the intial guess in the frequency domain (i.e.
+% containing  the fourier coefficients)
+%       H   :  number of Hamonics
+global elementList
+
+Nh = 2*H+1;
+Gbar = makeHB_Gmat(H); % harmonic balance matrix Gbar
+Cbar = makeHB_Cmat(H); % harmonic balance matrix Cbar
+n = elementList.n; % size of regular MNA
+nHB = Nh*n; % size of Harmonc Balance MNA
+
+
+[~,~,Bbar]= makeBvector(H);    % ***---  Bbar is the SOURCE VECTOR FOR HARMONIC BALANCE---***
+
+freq = elementList.HB_VolSources.FREQUENCY ;  % ***--- frequency of the Harmonic Balance source ---***
+
+X_out = Xguess;
+
+while (1)
+        F = HB_fvect(X_out,H);
+        J = HB_nl_jacobian(X_out,H);
+        phi = (Gbar+Cbar) * X_out + F - (Btr + (Cmat/h)*X_n);
+        dphi = (Gmat+Cmat/h) + J;
+
+        delta_x = ((-1) * dphi)\phi;
+
+        % dX(iteration) = norm(delta_x);
+        X_n1 = X_n1 + delta_x;
+        if norm(delta_x) < 0.0001
+            break;
+        end
+        %iteration = iteration + 1;
+end
